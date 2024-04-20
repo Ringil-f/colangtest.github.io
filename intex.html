@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@7.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.0"></script>
+    <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+      on_finish:function(){
+        jsPsych.data.get().localSave('csv','mydata.csv');
+      },
+      show_progress_bar: true,
+      message_progress_bar: '实验进度'
+    });
+
+    /* create timeline */
+    var timeline = [];
+
+    var preload = {
+      type: jsPsychPreload,
+      audio: ['audio/DOTH1.wav','audio/DOTH2.wav','audio/DOTH3.wav','audio/KHU1.wav','audio/KHU2.wav','audio/KHU3.wav','audio/KLIN1.wav','audio/KLIN2.wav','audio/KLIN3.wav','audio/NAVI1.wav','audio/NAVI2.wav','audio/NAVI3.wav','audio/QUEN1.wav','audio/QUEN2.wav','audio/QUEN3.wav','audio/SIN1.wav','audio/SIN2.wav','audio/SIN3.wav','audio/VAL1.wav','audio/VAL2.wav','audio/VAL3.wav','audio/testvolume.wav'],
+      show_progress_bar:true,
+    };
+    timeline.push(preload);
+
+
+    /* define welcome message trial */
+    var welcome = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+      <p>欢迎参与本次实验！</p>
+      <p style="font-size:15px;color:red;">按任意键继续</p>
+      `
+    };
+    timeline.push(welcome);
+
+    var info = {
+       type: jsPsychSurveyText,
+       questions: [
+          {prompt: '请输入您的年龄', required: true},
+          {prompt: '请输入您的性别（男/女）', required: true},
+          {prompt: '请输入您的手机尾号后4位（仅用于数据统计）',required: true}
+        ],
+        button_label:'继续',
+    }
+    timeline.push(info);
+
+
+    var instructions = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <p style="font-weight:bold;">实验须知：</p>
+        <p>1. 在本实验中，您将听到几种完全虚构的外星语言，您的任务是根据直觉对音频进行打分。</p>
+        <p>2. 评分通过拖动评分条进行。</p>
+        <p>3. 音频播放完毕后方能移动评分条作答。</p>
+        <p>4. 实验结束后，浏览器将自动下载您的作答数据为一个csv文件。请您将文件发送到主试的邮箱或微信。</p>
+        <p></p>
+        <p style="font-size:15px;color:red;">按任意键继续</p>
+        `,
+      };
+    timeline.push(instructions);
+
+    var testvolume = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <p style="font-weight:bold;">试音环节</p>
+        <p>接下来将播放15s的音频，您可以在这一阶段调整您的设备音量使声音清晰</p>
+        <p>该环节的作答仅用于示例操作</p>
+        <p></p>
+        <p style="font-size:15px;color:red;">按任意键继续</p>
+        `,
+      };
+    timeline.push(testvolume);
+
+
+    var testvolume_try = {
+      type: jsPsychAudioSliderResponse,
+      stimulus: 'audio/testvolume.wav',
+      labels:['温和 0','1','2','3','4','5','6','7','8','9','10 攻击性'],
+      response_allowed_while_playing:false,
+      slider_width:700,
+      max:10,
+      slider_start:5,
+      button_label:'继续',
+      prompt:'<p>请调整您的音量使音频清晰</p><p>滑动评分条进行打分（本题仅供示例）</p>'
+      };
+    timeline.push(testvolume_try);
+  
+    var startsign = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <p style="font-weight:bold;">实验开始</p>
+        <p style="font-size:15px;color:red;">按任意键继续</p>
+        `,
+      };
+    timeline.push(startsign);
+
+    var testprocedure = {
+      timeline:[
+        {
+          type: jsPsychAudioSliderResponse,
+          stimulus: jsPsych.timelineVariable('audiofile'),
+          labels:['温和 0','1','2','3','4','5','6','7','8','9','10 攻击性'],
+          response_allowed_while_playing:false,
+          max:10,
+          slider_width:700,
+          slider_start:5,
+          button_label:'下一题',
+          prompt:'滑动评分条进行打分</p>'
+        }
+      ],
+      timeline_variables:[
+        {audiofile:'audio/DOTH1.wav'},
+        {audiofile:'audio/DOTH2.wav'},
+        {audiofile:'audio/DOTH3.wav'},
+        {audiofile:'audio/KHU1.wav'},
+        {audiofile:'audio/KHU2.wav'},
+        {audiofile:'audio/KHU3.wav'},
+        {audiofile:'audio/KLIN1.wav'},
+        {audiofile:'audio/KLIN2.wav'},
+        {audiofile:'audio/KLIN3.wav'},
+        {audiofile:'audio/NAVI1.wav'},
+        {audiofile:'audio/NAVI2.wav'},
+        {audiofile:'audio/NAVI3.wav'},
+        {audiofile:'audio/QUEN1.wav'},
+        {audiofile:'audio/QUEN2.wav'},
+        {audiofile:'audio/QUEN3.wav'},
+        {audiofile:'audio/SIN1.wav'},
+        {audiofile:'audio/SIN2.wav'},
+        {audiofile:'audio/SIN3.wav'},
+        {audiofile:'audio/VAL1.wav'},
+        {audiofile:'audio/VAL2.wav'},
+        {audiofile:'audio/VAL3.wav'},
+      ],
+      randomize_order:true  
+    };
+    timeline.push(testprocedure);
+
+    var ending = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<p>实验结束，请按任意键，浏览器将会自动下载实验数据表，请您将文件发送给主试。</p>
+                 <p style="color:blue;">邮箱:2922476757@qq.com  微信：hkx2922476757</p>
+                 <p>被试费将在核对后发放。</p>
+                 <p>感谢您的参与！</p>
+                 <p style="font-size:20px;color:red;">按任意键下载数据表</p>
+                `
+    };
+    timeline.push(ending);
+
+  
+    
+    jsPsych.run(timeline);
+    
+  </script>
+</html>
