@@ -58,7 +58,7 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `
         <p style="font-weight:bold;">实验须知：</p>
-        <p>1. 在本实验中，您将听到几种完全虚构的外星语言，您的任务是根据直觉对音频进行打分。</p>
+        <p>1. 在本实验中，您将听到几种完全虚构的外星语言，您的任务是根据直觉对音频中语言的听感进行打分。</p>
         <p>2. 评分通过拖动评分条进行。</p>
         <p>3. 音频播放完毕后方能移动评分条作答。</p>
         <p>4. 实验结束后，浏览器将自动下载您的作答数据为一个csv文件。请您将文件发送到主试的邮箱或微信。</p>
@@ -90,7 +90,7 @@
       max:4,
       slider_start:2,
       button_label:'继续',
-      prompt:'<p>请调整您的音量使音频清晰</p><p>滑动评分条进行打分（本题仅供示例）</p>'
+      prompt:'<p>请调整您的音量使音频清晰</p><p>滑动评分条对该语言的听感进行打分（本题仅供示例）</p>'
       };
     timeline.push(testvolume_try);
   
@@ -114,7 +114,7 @@
           slider_width:700,
           slider_start:2,
           button_label:'下一题',
-          prompt:'滑动评分条进行打分</p>'
+          prompt:'滑动评分条对该语言的听感进行打分</p>'
         }
       ],
       timeline_variables:[
